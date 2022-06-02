@@ -2,7 +2,10 @@ import React from "react";
 import { graphql } from "gatsby";
 import { MDXRenderer } from "gatsby-plugin-mdx";
 import { GatsbyImage, getImage } from "gatsby-plugin-image";
-import Layout from "../../components/layout";
+import Layout from "../../components/Layout";
+import CodeBlock from "../../components/CodeBlock";
+import { MDXProvider } from "@mdx-js/react";
+
 const BlogPost = ({ data }) => {
   /*
   console.log(
@@ -12,9 +15,11 @@ const BlogPost = ({ data }) => {
   const image =
     data.mdx.frontmatter.hero_image &&
     getImage(data.mdx.frontmatter.hero_image);
+
   return (
     <Layout pageTitle={data.mdx.frontmatter.title}>
       <p>{data.mdx.frontmatter.date}</p>
+
       {image && (
         <>
           <GatsbyImage
@@ -34,14 +39,19 @@ const BlogPost = ({ data }) => {
       )}
 
       <hr />
-      <MDXRenderer>{data.mdx.body}</MDXRenderer>
+      <MDXProvider
+        components={{
+          pre: CodeBlock,
+        }}
+      >
+        <MDXRenderer>{data.mdx.body}</MDXRenderer>
+      </MDXProvider>
     </Layout>
   );
 };
 export const query = graphql`
   query ($id: String) {
     mdx(id: { eq: $id }) {
-      body
       frontmatter {
         title
         date(formatString: "MMMM DD, YYYY")
@@ -54,6 +64,7 @@ export const query = graphql`
           }
         }
       }
+      body
     }
   }
 `;

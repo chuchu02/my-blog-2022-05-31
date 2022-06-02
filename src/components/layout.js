@@ -16,7 +16,6 @@ function Layout({ pageTitle, children }) {
       site {
         siteMetadata {
           title
-          description
         }
       }
     }
