@@ -2,8 +2,9 @@ import { graphql, Link } from "gatsby";
 import { StaticImage } from "gatsby-plugin-image";
 import React from "react";
 import Layout from "../../components/Layout";
+import kebabCase from "lodash.kebabcase";
 
-const BlogPage = ({ data }) => {
+const BlogPage = ({ data, loction }) => {
   return (
     <Layout pageTitle="My Blog Posts">
       {data.allMdx.nodes.map((node) => (
@@ -12,6 +13,19 @@ const BlogPage = ({ data }) => {
             <Link to={`/blog/${node.slug}`}>{node.frontmatter.title}</Link>
           </h2>
           <p>Posted: {node.frontmatter.date}</p>
+          <div>
+            <ul>
+              {node.frontmatter.tags
+                ? node.frontmatter.tags.map((tag) => (
+                    <li key={kebabCase(tag)}>
+                      <Link to={`/tags/${kebabCase(tag)}`}>
+                        {kebabCase(tag)}
+                      </Link>
+                    </li>
+                  ))
+                : null}
+            </ul>
+          </div>
         </article>
       ))}
       <StaticImage
